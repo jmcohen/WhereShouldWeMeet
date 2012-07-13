@@ -7,6 +7,20 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		3F2E5EDE15A9F28000B1F8F3 /* WhereShouldWeMeetViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3F2E5EDD15A9F28000B1F8F3 /* WhereShouldWeMeetViewController.m */; };
+		3F2E5EE715A9F65B00B1F8F3 /* WhereShouldWeMeet.m in Sources */ = {isa = PBXBuildFile; fileRef = 3F2E5EE615A9F65B00B1F8F3 /* WhereShouldWeMeet.m */; };
+		3F2E5EEA15AA0BA700B1F8F3 /* ChooseCategoryViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3F2E5EE915AA0BA700B1F8F3 /* ChooseCategoryViewController.m */; };
+		3F2E5EF115AA2C7F00B1F8F3 /* AddAddressViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3F2E5EF015AA2C7F00B1F8F3 /* AddAddressViewController.m */; };
+		3F2E5EF515AA360600B1F8F3 /* AddressPlace.m in Sources */ = {isa = PBXBuildFile; fileRef = 3F2E5EF415AA360600B1F8F3 /* AddressPlace.m */; };
+		3F2E5EF815AA390900B1F8F3 /* AddFriendLocationViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3F2E5EF715AA390800B1F8F3 /* AddFriendLocationViewController.m */; };
+		3F2E60D415AA3B7300B1F8F3 /* FBDialog.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 3F2E60C715AA3B7300B1F8F3 /* FBDialog.bundle */; };
+		3F2E60D515AA3B7300B1F8F3 /* libfacebook_ios_sdk.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 3F2E60CD15AA3B7300B1F8F3 /* libfacebook_ios_sdk.a */; };
+		3F2E615015AAA8CF00B1F8F3 /* FriendLocationPlace.m in Sources */ = {isa = PBXBuildFile; fileRef = 3F2E614F15AAA8CF00B1F8F3 /* FriendLocationPlace.m */; };
+		3F2E615215AB40AF00B1F8F3 /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3F2E615115AB40AF00B1F8F3 /* CoreLocation.framework */; };
+		3F2E615515AB473C00B1F8F3 /* Place.m in Sources */ = {isa = PBXBuildFile; fileRef = 3F2E615415AB473C00B1F8F3 /* Place.m */; };
+		3F2E615815AB4DC800B1F8F3 /* MyLocationPlace.m in Sources */ = {isa = PBXBuildFile; fileRef = 3F2E615715AB4DC800B1F8F3 /* MyLocationPlace.m */; };
+		3F9EBB6115ACFD0000882A47 /* CLLocationManager+blocks.m in Sources */ = {isa = PBXBuildFile; fileRef = 3F9EBB6015ACFD0000882A47 /* CLLocationManager+blocks.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
+		3F9EBB6515AD099300882A47 /* CLLocation+CLLocation_Dictionary.m in Sources */ = {isa = PBXBuildFile; fileRef = 3F9EBB6415AD099300882A47 /* CLLocation+CLLocation_Dictionary.m */; };
 		3FB1ACCD15A76252006E8DA7 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3FB1ACCC15A76252006E8DA7 /* UIKit.framework */; };
 		3FB1ACCF15A76252006E8DA7 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3FB1ACCE15A76252006E8DA7 /* Foundation.framework */; };
 		3FB1ACD115A76252006E8DA7 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3FB1ACD015A76252006E8DA7 /* CoreGraphics.framework */; };
@@ -15,24 +29,65 @@
 		3FB1ACDD15A76252006E8DA7 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 3FB1ACDC15A76252006E8DA7 /* AppDelegate.m */; };
 		3FB1ACE015A76252006E8DA7 /* MainStoryboard_iPhone.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 3FB1ACDE15A76252006E8DA7 /* MainStoryboard_iPhone.storyboard */; };
 		3FB1ACE315A76252006E8DA7 /* MainStoryboard_iPad.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 3FB1ACE115A76252006E8DA7 /* MainStoryboard_iPad.storyboard */; };
-		3FB1ACE615A76252006E8DA7 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3FB1ACE515A76252006E8DA7 /* ViewController.m */; };
+		3FC8B50015ABB4E400B700FA /* ShowVenueViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3FC8B4FF15ABB4E400B700FA /* ShowVenueViewController.m */; };
+		3FC8B50415ABE38200B700FA /* UIAlertView+Blocks.m in Sources */ = {isa = PBXBuildFile; fileRef = 3FC8B50315ABE38200B700FA /* UIAlertView+Blocks.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		3F2E5EDC15A9F28000B1F8F3 /* WhereShouldWeMeetViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WhereShouldWeMeetViewController.h; sourceTree = "<group>"; };
+		3F2E5EDD15A9F28000B1F8F3 /* WhereShouldWeMeetViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WhereShouldWeMeetViewController.m; sourceTree = "<group>"; };
+		3F2E5EE515A9F65B00B1F8F3 /* WhereShouldWeMeet.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WhereShouldWeMeet.h; sourceTree = "<group>"; };
+		3F2E5EE615A9F65B00B1F8F3 /* WhereShouldWeMeet.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WhereShouldWeMeet.m; sourceTree = "<group>"; };
+		3F2E5EE815AA0BA700B1F8F3 /* ChooseCategoryViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ChooseCategoryViewController.h; sourceTree = "<group>"; };
+		3F2E5EE915AA0BA700B1F8F3 /* ChooseCategoryViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ChooseCategoryViewController.m; sourceTree = "<group>"; };
+		3F2E5EEF15AA2C7F00B1F8F3 /* AddAddressViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AddAddressViewController.h; sourceTree = "<group>"; };
+		3F2E5EF015AA2C7F00B1F8F3 /* AddAddressViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AddAddressViewController.m; sourceTree = "<group>"; };
+		3F2E5EF315AA360600B1F8F3 /* AddressPlace.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AddressPlace.h; sourceTree = "<group>"; };
+		3F2E5EF415AA360600B1F8F3 /* AddressPlace.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AddressPlace.m; sourceTree = "<group>"; };
+		3F2E5EF615AA390800B1F8F3 /* AddFriendLocationViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AddFriendLocationViewController.h; sourceTree = "<group>"; };
+		3F2E5EF715AA390800B1F8F3 /* AddFriendLocationViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AddFriendLocationViewController.m; sourceTree = "<group>"; };
+		3F2E60C515AA3B7300B1F8F3 /* Facebook.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Facebook.h; sourceTree = "<group>"; };
+		3F2E60C615AA3B7300B1F8F3 /* FBConnect.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FBConnect.h; sourceTree = "<group>"; };
+		3F2E60C715AA3B7300B1F8F3 /* FBDialog.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = FBDialog.bundle; sourceTree = "<group>"; };
+		3F2E60C815AA3B7300B1F8F3 /* FBDialog.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FBDialog.h; sourceTree = "<group>"; };
+		3F2E60C915AA3B7300B1F8F3 /* FBFrictionlessRequestSettings.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FBFrictionlessRequestSettings.h; sourceTree = "<group>"; };
+		3F2E60CA15AA3B7300B1F8F3 /* FBLoginDialog.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FBLoginDialog.h; sourceTree = "<group>"; };
+		3F2E60CB15AA3B7300B1F8F3 /* FBRequest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FBRequest.h; sourceTree = "<group>"; };
+		3F2E60CC15AA3B7300B1F8F3 /* JSON.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JSON.h; sourceTree = "<group>"; };
+		3F2E60CD15AA3B7300B1F8F3 /* libfacebook_ios_sdk.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libfacebook_ios_sdk.a; sourceTree = "<group>"; };
+		3F2E60CE15AA3B7300B1F8F3 /* NSObject+SBJSON.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSObject+SBJSON.h"; sourceTree = "<group>"; };
+		3F2E60CF15AA3B7300B1F8F3 /* NSString+SBJSON.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSString+SBJSON.h"; sourceTree = "<group>"; };
+		3F2E60D015AA3B7300B1F8F3 /* SBJSON.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SBJSON.h; sourceTree = "<group>"; };
+		3F2E60D115AA3B7300B1F8F3 /* SBJsonBase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SBJsonBase.h; sourceTree = "<group>"; };
+		3F2E60D215AA3B7300B1F8F3 /* SBJsonParser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SBJsonParser.h; sourceTree = "<group>"; };
+		3F2E60D315AA3B7300B1F8F3 /* SBJsonWriter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SBJsonWriter.h; sourceTree = "<group>"; };
+		3F2E614E15AAA8CF00B1F8F3 /* FriendLocationPlace.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FriendLocationPlace.h; sourceTree = "<group>"; };
+		3F2E614F15AAA8CF00B1F8F3 /* FriendLocationPlace.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FriendLocationPlace.m; sourceTree = "<group>"; };
+		3F2E615115AB40AF00B1F8F3 /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
+		3F2E615315AB473C00B1F8F3 /* Place.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Place.h; sourceTree = "<group>"; };
+		3F2E615415AB473C00B1F8F3 /* Place.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Place.m; sourceTree = "<group>"; };
+		3F2E615615AB4DC800B1F8F3 /* MyLocationPlace.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MyLocationPlace.h; sourceTree = "<group>"; };
+		3F2E615715AB4DC800B1F8F3 /* MyLocationPlace.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MyLocationPlace.m; sourceTree = "<group>"; };
+		3F9EBB5F15ACFD0000882A47 /* CLLocationManager+blocks.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "CLLocationManager+blocks.h"; sourceTree = "<group>"; };
+		3F9EBB6015ACFD0000882A47 /* CLLocationManager+blocks.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "CLLocationManager+blocks.m"; sourceTree = "<group>"; };
+		3F9EBB6315AD099200882A47 /* CLLocation+CLLocation_Dictionary.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "CLLocation+CLLocation_Dictionary.h"; sourceTree = "<group>"; };
+		3F9EBB6415AD099300882A47 /* CLLocation+CLLocation_Dictionary.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "CLLocation+CLLocation_Dictionary.m"; sourceTree = "<group>"; };
 		3FB1ACC815A76252006E8DA7 /* WhereShouldWeMeet.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = WhereShouldWeMeet.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		3FB1ACCC15A76252006E8DA7 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		3FB1ACCE15A76252006E8DA7 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		3FB1ACD015A76252006E8DA7 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
-		3FB1ACD415A76252006E8DA7 /* WhereShouldWeMeet-Info.plist */ = {isa = PBXFileReference; path = "WhereShouldWeMeet-Info.plist"; sourceTree = "<group>"; };
+		3FB1ACD415A76252006E8DA7 /* WhereShouldWeMeet-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "WhereShouldWeMeet-Info.plist"; sourceTree = "<group>"; };
 		3FB1ACD615A76252006E8DA7 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		3FB1ACD815A76252006E8DA7 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
-		3FB1ACDA15A76252006E8DA7 /* WhereShouldWeMeet-Prefix.pch */ = {isa = PBXFileReference; path = "WhereShouldWeMeet-Prefix.pch"; sourceTree = "<group>"; };
-		3FB1ACDB15A76252006E8DA7 /* AppDelegate.h */ = {isa = PBXFileReference; path = AppDelegate.h; sourceTree = "<group>"; };
+		3FB1ACDA15A76252006E8DA7 /* WhereShouldWeMeet-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "WhereShouldWeMeet-Prefix.pch"; sourceTree = "<group>"; };
+		3FB1ACDB15A76252006E8DA7 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		3FB1ACDC15A76252006E8DA7 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
 		3FB1ACDF15A76252006E8DA7 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = en; path = en.lproj/MainStoryboard_iPhone.storyboard; sourceTree = "<group>"; };
 		3FB1ACE215A76252006E8DA7 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = en; path = en.lproj/MainStoryboard_iPad.storyboard; sourceTree = "<group>"; };
-		3FB1ACE415A76252006E8DA7 /* ViewController.h */ = {isa = PBXFileReference; path = ViewController.h; sourceTree = "<group>"; };
-		3FB1ACE515A76252006E8DA7 /* ViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ViewController.m; sourceTree = "<group>"; };
+		3FC8B4FE15ABB4E400B700FA /* ShowVenueViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ShowVenueViewController.h; sourceTree = "<group>"; };
+		3FC8B4FF15ABB4E400B700FA /* ShowVenueViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ShowVenueViewController.m; sourceTree = "<group>"; };
+		3FC8B50215ABE38200B700FA /* UIAlertView+Blocks.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIAlertView+Blocks.h"; sourceTree = "<group>"; };
+		3FC8B50315ABE38200B700FA /* UIAlertView+Blocks.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIAlertView+Blocks.m"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -40,15 +95,40 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				3F2E615215AB40AF00B1F8F3 /* CoreLocation.framework in Frameworks */,
 				3FB1ACCD15A76252006E8DA7 /* UIKit.framework in Frameworks */,
 				3FB1ACCF15A76252006E8DA7 /* Foundation.framework in Frameworks */,
 				3FB1ACD115A76252006E8DA7 /* CoreGraphics.framework in Frameworks */,
+				3F2E60D515AA3B7300B1F8F3 /* libfacebook_ios_sdk.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		3F2E60C415AA3B7300B1F8F3 /* facebook-ios-sdk */ = {
+			isa = PBXGroup;
+			children = (
+				3F2E60C515AA3B7300B1F8F3 /* Facebook.h */,
+				3F2E60C615AA3B7300B1F8F3 /* FBConnect.h */,
+				3F2E60C715AA3B7300B1F8F3 /* FBDialog.bundle */,
+				3F2E60C815AA3B7300B1F8F3 /* FBDialog.h */,
+				3F2E60C915AA3B7300B1F8F3 /* FBFrictionlessRequestSettings.h */,
+				3F2E60CA15AA3B7300B1F8F3 /* FBLoginDialog.h */,
+				3F2E60CB15AA3B7300B1F8F3 /* FBRequest.h */,
+				3F2E60CC15AA3B7300B1F8F3 /* JSON.h */,
+				3F2E60CD15AA3B7300B1F8F3 /* libfacebook_ios_sdk.a */,
+				3F2E60CE15AA3B7300B1F8F3 /* NSObject+SBJSON.h */,
+				3F2E60CF15AA3B7300B1F8F3 /* NSString+SBJSON.h */,
+				3F2E60D015AA3B7300B1F8F3 /* SBJSON.h */,
+				3F2E60D115AA3B7300B1F8F3 /* SBJsonBase.h */,
+				3F2E60D215AA3B7300B1F8F3 /* SBJsonParser.h */,
+				3F2E60D315AA3B7300B1F8F3 /* SBJsonWriter.h */,
+			);
+			name = "facebook-ios-sdk";
+			path = "WhereShouldWeMeet/facebook-ios-sdk";
+			sourceTree = "<group>";
+		};
 		3FB1ACBD15A76252006E8DA7 = {
 			isa = PBXGroup;
 			children = (
@@ -69,6 +149,8 @@
 		3FB1ACCB15A76252006E8DA7 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				3F2E60C415AA3B7300B1F8F3 /* facebook-ios-sdk */,
+				3F2E615115AB40AF00B1F8F3 /* CoreLocation.framework */,
 				3FB1ACCC15A76252006E8DA7 /* UIKit.framework */,
 				3FB1ACCE15A76252006E8DA7 /* Foundation.framework */,
 				3FB1ACD015A76252006E8DA7 /* CoreGraphics.framework */,
@@ -81,10 +163,34 @@
 			children = (
 				3FB1ACDB15A76252006E8DA7 /* AppDelegate.h */,
 				3FB1ACDC15A76252006E8DA7 /* AppDelegate.m */,
+				3F2E615315AB473C00B1F8F3 /* Place.h */,
+				3F2E615415AB473C00B1F8F3 /* Place.m */,
+				3F2E5EF315AA360600B1F8F3 /* AddressPlace.h */,
+				3F2E5EF415AA360600B1F8F3 /* AddressPlace.m */,
+				3F2E615615AB4DC800B1F8F3 /* MyLocationPlace.h */,
+				3F2E615715AB4DC800B1F8F3 /* MyLocationPlace.m */,
+				3F2E614E15AAA8CF00B1F8F3 /* FriendLocationPlace.h */,
+				3F2E614F15AAA8CF00B1F8F3 /* FriendLocationPlace.m */,
+				3F2E5EE515A9F65B00B1F8F3 /* WhereShouldWeMeet.h */,
+				3F2E5EE615A9F65B00B1F8F3 /* WhereShouldWeMeet.m */,
+				3F2E5EDC15A9F28000B1F8F3 /* WhereShouldWeMeetViewController.h */,
+				3F2E5EDD15A9F28000B1F8F3 /* WhereShouldWeMeetViewController.m */,
+				3F2E5EEF15AA2C7F00B1F8F3 /* AddAddressViewController.h */,
+				3F2E5EF015AA2C7F00B1F8F3 /* AddAddressViewController.m */,
+				3F2E5EF615AA390800B1F8F3 /* AddFriendLocationViewController.h */,
+				3F2E5EF715AA390800B1F8F3 /* AddFriendLocationViewController.m */,
+				3F2E5EE815AA0BA700B1F8F3 /* ChooseCategoryViewController.h */,
+				3F2E5EE915AA0BA700B1F8F3 /* ChooseCategoryViewController.m */,
+				3FC8B4FE15ABB4E400B700FA /* ShowVenueViewController.h */,
+				3FC8B4FF15ABB4E400B700FA /* ShowVenueViewController.m */,
 				3FB1ACDE15A76252006E8DA7 /* MainStoryboard_iPhone.storyboard */,
 				3FB1ACE115A76252006E8DA7 /* MainStoryboard_iPad.storyboard */,
-				3FB1ACE415A76252006E8DA7 /* ViewController.h */,
-				3FB1ACE515A76252006E8DA7 /* ViewController.m */,
+				3F9EBB5F15ACFD0000882A47 /* CLLocationManager+blocks.h */,
+				3F9EBB6015ACFD0000882A47 /* CLLocationManager+blocks.m */,
+				3F9EBB6315AD099200882A47 /* CLLocation+CLLocation_Dictionary.h */,
+				3F9EBB6415AD099300882A47 /* CLLocation+CLLocation_Dictionary.m */,
+				3FC8B50215ABE38200B700FA /* UIAlertView+Blocks.h */,
+				3FC8B50315ABE38200B700FA /* UIAlertView+Blocks.m */,
 				3FB1ACD315A76252006E8DA7 /* Supporting Files */,
 			);
 			path = WhereShouldWeMeet;
@@ -154,6 +260,7 @@
 				3FB1ACD715A76252006E8DA7 /* InfoPlist.strings in Resources */,
 				3FB1ACE015A76252006E8DA7 /* MainStoryboard_iPhone.storyboard in Resources */,
 				3FB1ACE315A76252006E8DA7 /* MainStoryboard_iPad.storyboard in Resources */,
+				3F2E60D415AA3B7300B1F8F3 /* FBDialog.bundle in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -166,7 +273,19 @@
 			files = (
 				3FB1ACD915A76252006E8DA7 /* main.m in Sources */,
 				3FB1ACDD15A76252006E8DA7 /* AppDelegate.m in Sources */,
-				3FB1ACE615A76252006E8DA7 /* ViewController.m in Sources */,
+				3F2E5EDE15A9F28000B1F8F3 /* WhereShouldWeMeetViewController.m in Sources */,
+				3F2E5EE715A9F65B00B1F8F3 /* WhereShouldWeMeet.m in Sources */,
+				3F2E5EEA15AA0BA700B1F8F3 /* ChooseCategoryViewController.m in Sources */,
+				3F2E5EF115AA2C7F00B1F8F3 /* AddAddressViewController.m in Sources */,
+				3F2E5EF515AA360600B1F8F3 /* AddressPlace.m in Sources */,
+				3F2E5EF815AA390900B1F8F3 /* AddFriendLocationViewController.m in Sources */,
+				3F2E615015AAA8CF00B1F8F3 /* FriendLocationPlace.m in Sources */,
+				3F2E615515AB473C00B1F8F3 /* Place.m in Sources */,
+				3F2E615815AB4DC800B1F8F3 /* MyLocationPlace.m in Sources */,
+				3FC8B50015ABB4E400B700FA /* ShowVenueViewController.m in Sources */,
+				3FC8B50415ABE38200B700FA /* UIAlertView+Blocks.m in Sources */,
+				3F9EBB6115ACFD0000882A47 /* CLLocationManager+blocks.m in Sources */,
+				3F9EBB6515AD099300882A47 /* CLLocation+CLLocation_Dictionary.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -206,6 +325,7 @@
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
 				CLANG_ENABLE_OBJC_ARC = YES;
+				CODE_SIGN_IDENTITY = "iPhone Developer: Jeremy Cohen (MP4WUF9UGW)";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = NO;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
@@ -221,6 +341,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 5.1;
+				PROVISIONING_PROFILE = "70AB29A7-42E9-4398-B8FA-3E299D33B62E";
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -232,6 +353,7 @@
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
 				CLANG_ENABLE_OBJC_ARC = YES;
+				CODE_SIGN_IDENTITY = "iPhone Developer: Jeremy Cohen (MP4WUF9UGW)";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
@@ -241,6 +363,7 @@
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 5.1;
 				OTHER_CFLAGS = "-DNS_BLOCK_ASSERTIONS=1";
+				PROVISIONING_PROFILE = "70AB29A7-42E9-4398-B8FA-3E299D33B62E";
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VALIDATE_PRODUCT = YES;
@@ -253,6 +376,15 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "WhereShouldWeMeet/WhereShouldWeMeet-Prefix.pch";
 				INFOPLIST_FILE = "WhereShouldWeMeet/WhereShouldWeMeet-Info.plist";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(SRCROOT)/facebook-ios-sdk/build/facebook-ios-sdk.build/Release-iphoneos/facebook-ios-sdk.build/Objects-normal/armv6\"",
+					"\"$(SRCROOT)/facebook-ios-sdk/build/facebook-ios-sdk.build/Release-iphoneos/facebook-ios-sdk.build/Objects-normal/armv7\"",
+					"\"$(SRCROOT)/facebook-ios-sdk/build/Release-iphoneos\"",
+					"\"$(SRCROOT)/facebook-ios-sdk/build/Release-iphonesimulator\"",
+					"\"$(SRCROOT)/facebook-ios-sdk/lib/facebook-ios-sdk\"",
+					"\"$(SRCROOT)/WhereShouldWeMeet/facebook-ios-sdk\"",
+				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				WRAPPER_EXTENSION = app;
 			};
@@ -264,6 +396,15 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "WhereShouldWeMeet/WhereShouldWeMeet-Prefix.pch";
 				INFOPLIST_FILE = "WhereShouldWeMeet/WhereShouldWeMeet-Info.plist";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(SRCROOT)/facebook-ios-sdk/build/facebook-ios-sdk.build/Release-iphoneos/facebook-ios-sdk.build/Objects-normal/armv6\"",
+					"\"$(SRCROOT)/facebook-ios-sdk/build/facebook-ios-sdk.build/Release-iphoneos/facebook-ios-sdk.build/Objects-normal/armv7\"",
+					"\"$(SRCROOT)/facebook-ios-sdk/build/Release-iphoneos\"",
+					"\"$(SRCROOT)/facebook-ios-sdk/build/Release-iphonesimulator\"",
+					"\"$(SRCROOT)/facebook-ios-sdk/lib/facebook-ios-sdk\"",
+					"\"$(SRCROOT)/WhereShouldWeMeet/facebook-ios-sdk\"",
+				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				WRAPPER_EXTENSION = app;
 			};
@@ -288,6 +429,7 @@
 				3FB1ACEB15A76252006E8DA7 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};

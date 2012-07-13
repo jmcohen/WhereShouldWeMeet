@@ -7,15 +7,50 @@
 //
 
 #import "AppDelegate.h"
+#import "WhereShouldWeMeet.h"
+#import "UIAlertView+Blocks.h"
 
 @implementation AppDelegate
 
 @synthesize window = _window;
+@synthesize deviceToken;
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
-    // Override point for customization after application launch.
+    [[UIApplication sharedApplication] registerForRemoteNotificationTypes:(UIRemoteNotificationTypeBadge | UIRemoteNotificationTypeSound | UIRemoteNotificationTypeAlert)];
+    
+    [[UINavigationBar appearance] setTintColor:[UIColor orangeColor]];
+    
     return YES;
+}
+
+- (void)application:(UIApplication *)app didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)devToken {
+    [WhereShouldWeMeet manager].deviceToken = [[[devToken description]
+                    stringByTrimmingCharactersInSet:[NSCharacterSet characterSetWithCharactersInString:@"<>"]] 
+                   stringByReplacingOccurrencesOfString:@" " 
+                   withString:@""];
+    [[WhereShouldWeMeet manager] registerUser];
+}
+
+- (void)application:(UIApplication *)app didFailToRegisterForRemoteNotificationsWithError:(NSError *)err {
+    NSLog(@"Error in registration. Error: %@", err);
+}
+
+- (void) application: (UIApplication *) app didReceiveRemoteNotification:(NSDictionary *)userInfo{
+    NSString *type = [userInfo objectForKey:@"type"];
+    if ([type isEqualToString:@"LocationRequest"]){
+        [UIAlertView displayAlertWithTitle:[NSString stringWithFormat:@"%@ wishes to know your location.", [userInfo objectForKey:@"name"]]
+                                    message:nil
+                            leftButtonTitle:@"Allow" 
+                          leftButtonAction:^{ [[WhereShouldWeMeet manager] reportLocationToId: [userInfo objectForKey: @"id"]];}
+                          rightButtonTitle:@"Decline"
+                         rightButtonAction:^(){}];
+    } else if ([type isEqualToString:@"LocationReport"]){
+        NSString *user = [userInfo objectForKey:@"id"];
+        NSString *locationJson = [userInfo objectForKey:@"location"];
+        NSDictionary *location = [NSJSONSerialization JSONObjectWithData:[locationJson dataUsingEncoding:NSUTF8StringEncoding] options:NSJSONReadingMutableContainers error:nil];
+        [[WhereShouldWeMeet manager] user: user didReportLocation: location];
+    }
 }
 							
 - (void)applicationWillResignActive:(UIApplication *)application
@@ -43,6 +78,11 @@
 - (void)applicationWillTerminate:(UIApplication *)application
 {
     // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
+}
+
+- (BOOL)application:(UIApplication *)application openURL:(NSURL *)url
+  sourceApplication:(NSString *)sourceApplication annotation:(id)annotation {
+    return [[WhereShouldWeMeet manager].facebook  handleOpenURL:url]; 
 }
 
 @end
