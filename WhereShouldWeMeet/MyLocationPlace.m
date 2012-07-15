@@ -9,7 +9,7 @@
 #import "MyLocationPlace.h"
 #import <CoreLocation/CLLocationManager.h>
 #import <CoreLocation/CLLocation.h>
-#import "CLLocation+CLLocation_Dictionary.h"
+#import "Coordinate.h"
 
 @implementation MyLocationPlace
 
@@ -32,7 +32,7 @@
 }
                                 
 - (void) locationManager:(CLLocationManager *)manager didUpdateToLocation:(CLLocation *)newLocation fromLocation:(CLLocation *)oldLocation {
-    self.coordinate = [newLocation toCoordinateDictionary];
+    self.coordinate = [[Coordinate alloc] initWithLocation:newLocation];
     self.isLoaded = YES;
     [manager stopUpdatingLocation];
 }

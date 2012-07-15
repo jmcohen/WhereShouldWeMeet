@@ -9,27 +9,47 @@
 #import "AppDelegate.h"
 #import "WhereShouldWeMeet.h"
 #import "UIAlertView+Blocks.h"
+#import "FriendsLocationEngine.h"
+#import "CityGridEngine.h"
+#import "Coordinate.h"
 
 @implementation AppDelegate
 
 @synthesize window = _window;
 @synthesize deviceToken;
+@synthesize friendsLocationEngine, cityGridEngine;
+@synthesize facebook;
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
     [[UIApplication sharedApplication] registerForRemoteNotificationTypes:(UIRemoteNotificationTypeBadge | UIRemoteNotificationTypeSound | UIRemoteNotificationTypeAlert)];
     
-    [[UINavigationBar appearance] setTintColor:[UIColor orangeColor]];
+    facebook = [[Facebook alloc] initWithAppId:@"316475088442311" andDelegate:self];
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    if ([defaults objectForKey:@"FBAccessTokenKey"] 
+        && [defaults objectForKey:@"FBExpirationDateKey"]) {
+        facebook.accessToken = [defaults objectForKey:@"FBAccessTokenKey"];
+        facebook.expirationDate = [defaults objectForKey:@"FBExpirationDateKey"];
+    }
     
+    if (![facebook isSessionValid])
+        [facebook authorize:nil];
+    
+    
+    friendsLocationEngine = [[FriendsLocationEngine alloc] initWithHostName:@"jmcohen.webfactional.com"];
+    friendsLocationEngine.facebook = self.facebook;
+    
+    cityGridEngine = [[CityGridEngine alloc] initWithHostName:@"api.citygridmedia.com"];
+            
     return YES;
 }
 
 - (void)application:(UIApplication *)app didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)devToken {
-    [WhereShouldWeMeet manager].deviceToken = [[[devToken description]
+    self.deviceToken = [[[devToken description]
                     stringByTrimmingCharactersInSet:[NSCharacterSet characterSetWithCharactersInString:@"<>"]] 
                    stringByReplacingOccurrencesOfString:@" " 
                    withString:@""];
-    [[WhereShouldWeMeet manager] registerUser];
+    [self.friendsLocationEngine registerUser: deviceToken];
 }
 
 - (void)application:(UIApplication *)app didFailToRegisterForRemoteNotificationsWithError:(NSError *)err {
@@ -42,15 +62,22 @@
         [UIAlertView displayAlertWithTitle:[NSString stringWithFormat:@"%@ wishes to know your location.", [userInfo objectForKey:@"name"]]
                                     message:nil
                             leftButtonTitle:@"Allow" 
-                          leftButtonAction:^{ [[WhereShouldWeMeet manager] reportLocationToId: [userInfo objectForKey: @"id"]];}
+                          leftButtonAction:^{ [[WhereShouldWeMeet manager] reportLocationToFriend: [userInfo objectForKey: @"id"]];}
                           rightButtonTitle:@"Decline"
                          rightButtonAction:^(){}];
     } else if ([type isEqualToString:@"LocationReport"]){
         NSString *user = [userInfo objectForKey:@"id"];
         NSString *locationJson = [userInfo objectForKey:@"location"];
-        NSDictionary *location = [NSJSONSerialization JSONObjectWithData:[locationJson dataUsingEncoding:NSUTF8StringEncoding] options:NSJSONReadingMutableContainers error:nil];
+        Coordinate *location = [[Coordinate alloc] initWithJson:locationJson];
         [[WhereShouldWeMeet manager] user: user didReportLocation: location];
     }
+}
+
+- (void) fbDidLogin {
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    [defaults setObject:facebook.accessToken forKey:@"FBAccessTokenKey"];
+    [defaults setObject:facebook.expirationDate forKey:@"FBExpirationDateKey"];
+    [defaults synchronize];
 }
 							
 - (void)applicationWillResignActive:(UIApplication *)application
@@ -82,7 +109,7 @@
 
 - (BOOL)application:(UIApplication *)application openURL:(NSURL *)url
   sourceApplication:(NSString *)sourceApplication annotation:(id)annotation {
-    return [[WhereShouldWeMeet manager].facebook  handleOpenURL:url]; 
+    return [self.facebook  handleOpenURL:url]; 
 }
 
 @end

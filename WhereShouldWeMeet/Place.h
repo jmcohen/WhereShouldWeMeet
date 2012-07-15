@@ -9,15 +9,15 @@
 #import <Foundation/Foundation.h>
 #import <CoreLocation/CLLocation.h>
 
-@class Place;
+@class Coordinate;
 
 @interface Place : NSObject {
     BOOL isLoaded;
-    NSDictionary *coordinate;
+    Coordinate *coordinate;
 }
 
 @property (nonatomic) BOOL isLoaded;
-@property (nonatomic, strong) NSDictionary *coordinate;
+@property (nonatomic, strong) Coordinate *coordinate;
 
 - (NSString *) description;
 - (NSString *) placeType;

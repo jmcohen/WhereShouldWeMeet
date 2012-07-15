@@ -7,7 +7,8 @@
 //
 
 #import "FriendLocationPlace.h"
-#import "WhereShouldWeMeet.h"
+#import "AppDelegate.h"
+#import "FriendsLocationEngine.h"
 
 @implementation FriendLocationPlace
 
@@ -17,11 +18,8 @@
     if (self = [super init]){
         friendId = [friend objectForKey:@"id"];
         friendName = [friend objectForKey:@"name"];
-        NSString *url = [NSString stringWithFormat:@"%@/requestLocation?accessToken=%@&id=%@", [WhereShouldWeMeet host], [WhereShouldWeMeet manager].facebook.accessToken, friendId];
-        NSURLRequest *request = [NSURLRequest requestWithURL:[NSURL URLWithString:url]];
-        [NSURLConnection sendAsynchronousRequest:request 
-                                           queue:[NSOperationQueue mainQueue]
-                               completionHandler:^(NSURLResponse *response, NSData *data, NSError *error){}];
+        FriendsLocationEngine *engine = ((AppDelegate *)[UIApplication sharedApplication].delegate).friendsLocationEngine;
+        [engine requestFriendLocation:friendId];
     }
     return self;
 }

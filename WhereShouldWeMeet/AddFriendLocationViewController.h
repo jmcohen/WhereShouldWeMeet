@@ -8,10 +8,13 @@
 
 #import <UIKit/UIKit.h>
 
-@interface AddFriendLocationViewController : UITableViewController {
+@interface AddFriendLocationViewController : UIViewController {
+    UITableView *tableView;
+    
     NSDictionary *selectedFriend;
 }
 
+@property (nonatomic, retain) IBOutlet UITableView *tableView;
 @property (nonatomic, retain) NSDictionary *selectedFriend;
 
 - (IBAction)done:(id)sender;

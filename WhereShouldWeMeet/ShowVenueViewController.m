@@ -16,7 +16,6 @@
 @implementation ShowVenueViewController
 
 @synthesize venues, currentVenue, currentVenueIndex;
-@synthesize nameLabel, phoneLabel, addressLabel;
 
 - (id)initWithStyle:(UITableViewStyle)style
 {
@@ -43,9 +42,6 @@
 - (void) setVenueIndex: (NSInteger) nextVenueIndex {
     self.currentVenueIndex = nextVenueIndex;
     self.currentVenue = [self.venues objectAtIndex:currentVenueIndex];
-    self.nameLabel.text = [self.currentVenue objectForKey:@"title"];
-    self.addressLabel.text = [self.currentVenue objectForKey:@"address"];
-    self.phoneLabel.text = [self.currentVenue objectForKey:@"phone"]; 
     [self.tableView reloadData];
 }
 
@@ -71,14 +67,41 @@
     return (interfaceOrientation == UIInterfaceOrientationPortrait);
 }
 
-#pragma mark - Table view delegate
+- (NSInteger) numberOfSectionsInTableView:(UITableView *)tableView{
+    if (self.currentVenue)
+        return 3;
+    
+    return 0;
+    
+}
+
+- (NSInteger) tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
+    return 1;
+}
+
+- (UITableViewCell *) tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
+    if (indexPath.section == 0){
+        UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"NameCell"];
+        cell.textLabel.text = [self.currentVenue valueForKey:@"name"];
+        return cell;
+    }
+    if (indexPath.section == 1){
+        UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"AddressCell"];
+        cell.textLabel.text = [[self.currentVenue valueForKey:@"address"] valueForKey:@"street"];
+        return cell;
+    }
+    if (indexPath.section == 2){
+        UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"PhoneCell"];
+        cell.textLabel.text = [self.currentVenue valueForKey:@"phone_number"];
+        return cell;
+    }    
+    return nil;
+}
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     if (indexPath.row == 0){
-        [[UIApplication sharedApplication] openURL:[NSURL URLWithString:[self.currentVenue objectForKey:@"link"]]];
     } else if (indexPath.row == 1){
-        // TOOD
     }
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
 }

@@ -16,16 +16,7 @@
 
 @implementation AddAddressViewController
 
-@synthesize addressField;
-
-- (id)initWithStyle:(UITableViewStyle)style
-{
-    self = [super initWithStyle:style];
-    if (self) {
-        // Custom initialization
-    }
-    return self;
-}
+@synthesize tableView, address, cancelButton, doneButton;
 
 - (void)viewDidLoad
 {
@@ -47,7 +38,6 @@
 }
 
 - (void) viewWillAppear:(BOOL)animated{
-    [self.addressField becomeFirstResponder];
     [super viewWillAppear:animated];
 }
 
@@ -62,12 +52,41 @@
 }
 
 - (IBAction)done:(id)sender{
-    [[WhereShouldWeMeet manager].places addObject: [[AddressPlace alloc] initWithAddress: addressField.text]];
-    [self.navigationController popViewControllerAnimated:YES];
+    [[WhereShouldWeMeet manager].places addObject: [[AddressPlace alloc] initWithAddress: address]];
+    [self dismissModalViewControllerAnimated:YES];
 }
 
 - (IBAction)cancel:(id)sender{
-    [self.navigationController popViewControllerAnimated:YES];
+    [self dismissModalViewControllerAnimated:YES];
 }
+
+- (NSString *) tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section{
+    return @"Address";
+}
+
+- (NSInteger) numberOfSectionsInTableView:(UITableView *)tableView{
+    return 1;
+}
+
+- (NSInteger) tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
+    return 1;
+}
+
+- (UITableViewCell *) tableView:(UITableView *)tv cellForRowAtIndexPath:(NSIndexPath *)indexPath{
+    UITableViewCell *cell = [tv dequeueReusableCellWithIdentifier:@"AddressFieldCell"];
+    UITextField *addressField = (UITextField *) [cell viewWithTag:1];
+    [addressField becomeFirstResponder];
+    return cell;
+}
+
+- (void) textFieldDidBeginEditing:(UITextField *)textField{
+    self.doneButton.enabled = NO;
+}
+
+- (void) textFieldDidEndEditing:(UITextField *)textField{
+    self.address = textField.text;
+    self.doneButton.enabled = YES;
+}
+
 
 @end

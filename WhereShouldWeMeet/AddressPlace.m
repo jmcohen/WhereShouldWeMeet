@@ -10,7 +10,7 @@
 #import <CoreLocation/CLGeocoder.h>
 #import <CoreLocation/CLPlacemark.h>
 #import <CoreLocation/CLLocation.h>
-#import "CLLocation+CLLocation_Dictionary.m"
+#import "Coordinate.h"
 
 @implementation AddressPlace
 
@@ -24,7 +24,7 @@
             //TODO: error handling
             if (placemarks.count > 0){
                 CLPlacemark *placemark = [placemarks objectAtIndex:0];
-                self.coordinate = [placemark.location toCoordinateDictionary];
+                self.coordinate = [[Coordinate alloc] initWithLocation:placemark.location];
                 self.isLoaded = YES;
             }
         }];

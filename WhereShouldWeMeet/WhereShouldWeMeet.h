@@ -7,23 +7,20 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "Facebook.h"
 #import "Place.h"
 #import <CoreLocation/CLLocationManagerDelegate.h>
 
 @class CLLocationManager;
+@class AppDelegate;
 
-@interface WhereShouldWeMeet : NSObject <FBSessionDelegate, NSURLConnectionDelegate, CLLocationManagerDelegate> {
+@interface WhereShouldWeMeet : NSObject <NSURLConnectionDelegate, CLLocationManagerDelegate> {
     CLLocationManager *locationManager;
+    AppDelegate *appDelegate;
     
     NSMutableArray *places;
     NSString *category;
     
     NSArray *categories;
-    
-    Facebook *facebook;
-    NSString *deviceToken;
-    
     NSArray *userFriends;
     NSArray *venues;
 }
@@ -31,19 +28,16 @@
 @property (nonatomic, strong) NSMutableArray *places;
 @property (nonatomic, strong) NSArray *categories; 
 @property (nonatomic, strong) NSString *category;
-@property (nonatomic, strong) Facebook *facebook;
-@property (nonatomic, strong) NSString *deviceToken;
 @property (nonatomic, strong) NSArray *userFriends;
 @property (nonatomic, strong) NSArray *venues;
+@property (nonatomic, strong) AppDelegate *appDelegate;
 
 - (id) init;
-- (void) registerUser;
 - (void) loadUserFriends;
-- (void) reportLocationToId: (NSString*) facebookId;
-- (void) user: (NSString *) facebookId didReportLocation: (NSDictionary *) location;
+- (void) reportLocationToFriend: (NSString*) facebookId;
+- (void) user: (NSString *) facebookId didReportLocation: (Coordinate *) location;
 - (void) loadVenues;
 
 + (WhereShouldWeMeet *) manager;
-+ (NSString *) host;
 
 @end

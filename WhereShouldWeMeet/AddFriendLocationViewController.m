@@ -16,35 +16,20 @@
 
 @implementation AddFriendLocationViewController
 
-@synthesize selectedFriend;
-
-- (id)initWithStyle:(UITableViewStyle)style
-{
-    self = [super initWithStyle:style];
-    if (self) {
-        // Custom initialization
-    }
-    return self;
-}
+@synthesize selectedFriend, tableView;
 
 - (void)viewDidLoad
 {
-    [[WhereShouldWeMeet manager] loadUserFriends];
+    WhereShouldWeMeet *manager = [WhereShouldWeMeet manager];
+    if (manager.userFriends == nil)
+        [manager loadUserFriends];
     [[NSNotificationCenter defaultCenter] addObserver:self.tableView selector:@selector(reloadData) name:@"UserFriendsLoaded" object:nil];
     [super viewDidLoad];
-
-    // Uncomment the following line to preserve selection between presentations.
-    // self.clearsSelectionOnViewWillAppear = NO;
- 
-    // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
-    // self.navigationItem.rightBarButtonItem = self.editButtonItem;
 }
 
 - (void)viewDidUnload
 {
     [super viewDidUnload];
-    // Release any retained subviews of the main view.
-    // e.g. self.myOutlet = nil;
 }
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
@@ -64,9 +49,9 @@
     return [[WhereShouldWeMeet manager].userFriends count];
 }
 
-- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
+- (UITableViewCell *)tableView:(UITableView *)tv cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"FriendCell"];
+    UITableViewCell *cell = [tv dequeueReusableCellWithIdentifier:@"FriendCell"];
     NSDictionary *friend = [[WhereShouldWeMeet manager].userFriends objectAtIndex:indexPath.row];
     cell.textLabel.text = [friend objectForKey:@"name"];
     if (friend == selectedFriend)
@@ -78,15 +63,15 @@
 
 #pragma mark - Table view delegate
 
-- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
+- (void)tableView:(UITableView *)tv didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     NSDictionary *friend = [[WhereShouldWeMeet manager].userFriends objectAtIndex:indexPath.row];
     if (selectedFriend == friend)
-        [tableView deselectRowAtIndexPath:indexPath animated:YES];
+        [tv deselectRowAtIndexPath:indexPath animated:YES];
     else {
         NSIndexPath *old = [NSIndexPath indexPathForRow:[[WhereShouldWeMeet manager].userFriends indexOfObject:selectedFriend] inSection:0];
         selectedFriend = friend;
-        [tableView reloadRowsAtIndexPaths:[NSArray arrayWithObjects:old, indexPath, nil] withRowAnimation:UITableViewRowAnimationFade];
+        [tv reloadRowsAtIndexPaths:[NSArray arrayWithObjects:old, indexPath, nil] withRowAnimation:UITableViewRowAnimationFade];
     }
 }
 
@@ -94,11 +79,11 @@
     if (self.selectedFriend){
         [[WhereShouldWeMeet manager].places addObject: [[FriendLocationPlace alloc] initWithFriend:self.selectedFriend]];
     }
-    [self.navigationController popViewControllerAnimated:YES];
+    [self dismissModalViewControllerAnimated:YES];
 }
 
 - (IBAction)cancel:(id)sender{
-    [self.navigationController popViewControllerAnimated:YES];
+    [self dismissModalViewControllerAnimated:YES];
 }
 
 @end

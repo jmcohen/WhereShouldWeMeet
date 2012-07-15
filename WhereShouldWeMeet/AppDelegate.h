@@ -7,12 +7,23 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "FBConnect.h"
 
-@interface AppDelegate : UIResponder <UIApplicationDelegate, UIAlertViewDelegate> {
+@class Facebook;
+@class FriendsLocationEngine;
+@class CityGridEngine;
+
+@interface AppDelegate : UIResponder <UIApplicationDelegate, UIAlertViewDelegate, FBSessionDelegate> {
     NSString *deviceToken;
+    FriendsLocationEngine *friendsLocationEngine;
+    CityGridEngine *cityGridEngine;
+    Facebook *facebook;
 }
 
 @property (strong, nonatomic) UIWindow *window;
+@property (strong, nonatomic) Facebook *facebook;
+@property (strong, nonatomic) FriendsLocationEngine *friendsLocationEngine;
+@property (strong, nonatomic) CityGridEngine *cityGridEngine;
 @property (strong, nonatomic) NSString *deviceToken;
 
 @end

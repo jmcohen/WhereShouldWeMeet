@@ -12,17 +12,11 @@
     NSArray *venues;
     NSInteger currentVenueIndex;
     NSDictionary *currentVenue;
-    
-    UILabel *nameLabel, *phoneLabel, *addressLabel;
 }
 
 @property (nonatomic, strong) NSArray *venues;
 @property (nonatomic) NSInteger currentVenueIndex;
 @property (nonatomic, strong) NSDictionary *currentVenue;
-
-@property (nonatomic, strong) IBOutlet UILabel *nameLabel;
-@property (nonatomic, strong) IBOutlet UILabel *phoneLabel;
-@property (nonatomic, strong) IBOutlet UILabel *addressLabel;
 
 - (IBAction)nextVenue:(id)sender;
 - (void) venuesLoaded;
