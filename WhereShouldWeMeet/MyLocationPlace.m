@@ -7,38 +7,47 @@
 //
 
 #import "MyLocationPlace.h"
-#import <CoreLocation/CLLocationManager.h>
-#import <CoreLocation/CLLocation.h>
-#import "Coordinate.h"
+#import "CLLocationManager+blocks.h"
+#import "Location.h"
+#import "AppDelegate.h"
+#import "FriendsLocationEngine.h"
+#import <FBiOSSDK/FBSession.h>
 
 @implementation MyLocationPlace
 
-- (id) init {
-    if (self = [super init]){
-        locationManager = [[CLLocationManager alloc] init];
-        locationManager.desiredAccuracy = kCLLocationAccuracyHundredMeters;
-        locationManager.delegate = self;
-        [locationManager startUpdatingLocation];
+- (id) init
+{
+    return [super init];
+}
+
+- (void) loadLocation:(void (^)())completionBlock
+{
+    locationManager = [[CLLocationManager alloc] initWithUpdateBlock:^(CLLocationManager *manager, CLLocation *newLocation, CLLocation *oldLocation, BOOL *stop)
+    {
+        self.location = [[Location alloc] initWithCoordinate:newLocation.coordinate];
+        [manager stopUpdatingLocation];
+        completionBlock();
     }
-    return self;
+        errorBlock:^(NSError *error){}];
+    locationManager.desiredAccuracy = kCLLocationAccuracyHundredMeters;
+    [locationManager startUpdatingLocation];
 }
 
-- (NSString *) placeType {
-    return @"Me";
+- (void) loadImage:(void (^)())completionBlock
+{
+    self.image = [UIImage imageNamed:@"person.png"];
+    
+    AppDelegate *appDelegate = (AppDelegate *) [UIApplication sharedApplication].delegate;
+    [appDelegate.facebookEngine imageAtURL:[NSURL URLWithString:[NSString stringWithFormat:@"https://graph.facebook.com/me/picture?type=normal&access_token=%@",[FBSession activeSession].accessToken]] onCompletion:^(UIImage *fetchedImage, NSURL *url, BOOL isInCache)
+     {
+         self.image = fetchedImage;
+         completionBlock();
+     }];
 }
 
-- (NSString *) description {
+- (NSString *) description
+{
     return @"My Location";
-}
-                                
-- (void) locationManager:(CLLocationManager *)manager didUpdateToLocation:(CLLocation *)newLocation fromLocation:(CLLocation *)oldLocation {
-    self.coordinate = [[Coordinate alloc] initWithLocation:newLocation];
-    self.isLoaded = YES;
-    [manager stopUpdatingLocation];
-}
-
-- (void) locationManager:(CLLocationManager *)manager didFailWithError:(NSError *)error{
-    NSLog(@"Failed with error %@", error);
 }
 
 @end

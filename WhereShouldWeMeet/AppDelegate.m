@@ -10,76 +10,98 @@
 #import "WhereShouldWeMeet.h"
 #import "UIAlertView+Blocks.h"
 #import "FriendsLocationEngine.h"
-#import "CityGridEngine.h"
-#import "Coordinate.h"
+#import "LocalSearchEngine.h"
+#import "Location.h"
+#import <FBiOSSDK/FacebookSDK.h>
+#import <MapKit/MKMapItem.h>
+#import "LocationRequestViewController.h"
+#import "UIAlertView+Blocks.h"
 
 @implementation AppDelegate
 
 @synthesize window = _window;
 @synthesize deviceToken;
-@synthesize friendsLocationEngine, cityGridEngine;
-@synthesize facebook;
+@synthesize friendsLocationEngine, localSearchEngine, facebookEngine;
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
+    [FBProfilePictureView class];
+    
     [[UIApplication sharedApplication] registerForRemoteNotificationTypes:(UIRemoteNotificationTypeBadge | UIRemoteNotificationTypeSound | UIRemoteNotificationTypeAlert)];
     
-    facebook = [[Facebook alloc] initWithAppId:@"316475088442311" andDelegate:self];
-    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-    if ([defaults objectForKey:@"FBAccessTokenKey"] 
-        && [defaults objectForKey:@"FBExpirationDateKey"]) {
-        facebook.accessToken = [defaults objectForKey:@"FBAccessTokenKey"];
-        facebook.expirationDate = [defaults objectForKey:@"FBExpirationDateKey"];
-    }
-    
-    if (![facebook isSessionValid])
-        [facebook authorize:nil];
-    
+    [FBSession sessionOpenWithPermissions:nil completionHandler:^(FBSession *session, FBSessionState status, NSError *error) {
+        if (self.deviceToken)
+            [friendsLocationEngine registerUser:self.deviceToken];
+    }];
     
     friendsLocationEngine = [[FriendsLocationEngine alloc] initWithHostName:@"jmcohen.webfactional.com"];
-    friendsLocationEngine.facebook = self.facebook;
     
-    cityGridEngine = [[CityGridEngine alloc] initWithHostName:@"api.citygridmedia.com"];
-            
+    localSearchEngine = [[LocalSearchEngine alloc] initWithHostName:@"maps.googleapis.com"];
+    
+    facebookEngine = [[MKNetworkEngine alloc] initWithHostName:@"graph.facebook.com"];
+    
+
+    
+    NSNotification *notification =
+    [launchOptions objectForKey:UIApplicationLaunchOptionsRemoteNotificationKey];
+    if (notification)
+    {
+        [self application:application didReceiveRemoteNotification:notification.userInfo];
+    }
+    
     return YES;
 }
 
-- (void)application:(UIApplication *)app didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)devToken {
+- (void)application:(UIApplication *)app didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)devToken
+{
     self.deviceToken = [[[devToken description]
                     stringByTrimmingCharactersInSet:[NSCharacterSet characterSetWithCharactersInString:@"<>"]] 
                    stringByReplacingOccurrencesOfString:@" " 
                    withString:@""];
-    [self.friendsLocationEngine registerUser: deviceToken];
+    if ([FBSession activeSession].accessToken)
+        [friendsLocationEngine registerUser: self.deviceToken];
 }
 
-- (void)application:(UIApplication *)app didFailToRegisterForRemoteNotificationsWithError:(NSError *)err {
+- (void)application:(UIApplication *)app didFailToRegisterForRemoteNotificationsWithError:(NSError *)err
+{
     NSLog(@"Error in registration. Error: %@", err);
 }
 
-- (void) application: (UIApplication *) app didReceiveRemoteNotification:(NSDictionary *)userInfo{
+- (void) application: (UIApplication *) app didReceiveRemoteNotification:(NSDictionary *)userInfo
+{
     NSString *type = [userInfo objectForKey:@"type"];
-    if ([type isEqualToString:@"LocationRequest"]){
-        [UIAlertView displayAlertWithTitle:[NSString stringWithFormat:@"%@ wishes to know your location.", [userInfo objectForKey:@"name"]]
-                                    message:nil
-                            leftButtonTitle:@"Allow" 
-                          leftButtonAction:^{ [[WhereShouldWeMeet manager] reportLocationToFriend: [userInfo objectForKey: @"id"]];}
-                          rightButtonTitle:@"Decline"
-                         rightButtonAction:^(){}];
-    } else if ([type isEqualToString:@"LocationReport"]){
-        NSString *user = [userInfo objectForKey:@"id"];
-        NSString *locationJson = [userInfo objectForKey:@"location"];
-        Coordinate *location = [[Coordinate alloc] initWithJson:locationJson];
-        [[WhereShouldWeMeet manager] user: user didReportLocation: location];
+    if ([type isEqualToString:@"LocationRequest"]) {
+        [self presentLocationRequest:[userInfo objectForKey:@"locationRequest"]];
     }
+    else if ([type isEqualToString:@"LocationReport"]) {
+          [[NSNotificationCenter defaultCenter] postNotificationName:@"DidReceiveLocationReport" object:nil userInfo:[userInfo objectForKey:@"locationReport"]];
+    }
+    else if ([type isEqualToString:@"Broadcast"]){
+        NSDictionary *broadcast = [userInfo objectForKey:@"broadcast"];
+        NSDictionary *locationDict = [NSJSONSerialization JSONObjectWithData:[[broadcast objectForKey:@"venueLocation"] dataUsingEncoding:NSUTF8StringEncoding]
+                                                                  options:NSJSONReadingMutableContainers
+                                                                    error:nil];
+        NSString *venueName = [broadcast objectForKey:@"venueName"];
+        NSString *broadcaster = [broadcast objectForKey:@"broadcaster"];
+        Location *venueLocation = [[Location alloc] initWithDictionary:locationDict];
+        [UIAlertView displayAlertWithTitle:[NSString stringWithFormat: @"%@ has broadcasted a meeting location.", broadcaster]
+                                   message:nil
+                           leftButtonTitle:@"Cancel"
+                          leftButtonAction:^{}
+                          rightButtonTitle:@"Show"
+                         rightButtonAction:^{
+                             MKMapItem *venueItem = [[MKMapItem alloc] initWithPlacemark:[[MKPlacemark alloc] initWithCoordinate:[venueLocation asCoordinate] addressDictionary:nil]];
+                             venueItem.name = venueName;
+                             MKMapItem *currentLocationItem = [MKMapItem mapItemForCurrentLocation];
+                             currentLocationItem.name = @"My Location";
+                             [MKMapItem openMapsWithItems:[NSArray arrayWithObjects:currentLocationItem, venueItem, nil]
+                                            launchOptions:[NSDictionary dictionaryWithObjectsAndKeys:MKLaunchOptionsDirectionsModeDriving, MKLaunchOptionsDirectionsModeKey, nil]];
+                         }];
+    }
+    
+    app.applicationIconBadgeNumber = 0;
 }
-
-- (void) fbDidLogin {
-    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-    [defaults setObject:facebook.accessToken forKey:@"FBAccessTokenKey"];
-    [defaults setObject:facebook.expirationDate forKey:@"FBExpirationDateKey"];
-    [defaults synchronize];
-}
-							
+				
 - (void)applicationWillResignActive:(UIApplication *)application
 {
     // Sent when the application is about to move from active to inactive state. This can occur for certain types of temporary interruptions (such as an incoming phone call or SMS message) or when the user quits the application and it begins the transition to the background state.
@@ -107,9 +129,23 @@
     // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
 }
 
-- (BOOL)application:(UIApplication *)application openURL:(NSURL *)url
-  sourceApplication:(NSString *)sourceApplication annotation:(id)annotation {
-    return [self.facebook  handleOpenURL:url]; 
+- (BOOL)application:(UIApplication *)application openURL:(NSURL *)url sourceApplication:(NSString *)sourceApplication annotation:(id)annotation 
+{
+    return [FBSession.activeSession handleOpenURL:url]; 
 }
+
+- (void) presentLocationRequest: (NSDictionary *) locationRequest
+{
+    UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"MainStoryboard_iPhone" bundle:nil];
+    LocationRequestViewController *locationRequestViewController = [storyboard instantiateViewControllerWithIdentifier:@"LocationRequestController"];
+    
+    
+    [locationRequestViewController setRequester:locationRequest];
+    
+    UIViewController *currentViewController = self.window.rootViewController.modalViewController == nil ? self.window.rootViewController : self.window.rootViewController.modalViewController;
+    
+    [currentViewController presentModalViewController:locationRequestViewController animated:YES];
+}
+
 
 @end

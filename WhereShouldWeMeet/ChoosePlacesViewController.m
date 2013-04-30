@@ -1,17 +1,17 @@
 //
-//  WhereShouldWeMeetViewController.m
+//  ChoosePlacesViewController2.m
 //  WhereShouldWeMeet
 //
-//  Created by Jeremy Cohen on 7/8/12.
-//  Copyright (c) 2012 __MyCompanyName__. All rights reserved.
+//  Created by Jeremy Cohen on 7/24/12.
+//
 //
 
 #import "ChoosePlacesViewController.h"
+#import "PlaceCell.h"
 #import "WhereShouldWeMeet.h"
 #import "Place.h"
-#import "AddressPlace.h"
-#import "FriendLocationPlace.h"
 #import "MyLocationPlace.h"
+#import "UIImage+StackBlur.h"
 
 @interface ChoosePlacesViewController ()
 
@@ -19,106 +19,134 @@
 
 @implementation ChoosePlacesViewController
 
+@synthesize collectionView;
+
+- (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
+{
+    self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
+    if (self) {
+        // Custom initialization
+    }
+    return self;
+}
+
 - (void)viewDidLoad
 {
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(newPlace) name:@"NewPlace" object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(dataLoaded) name:@"ReloadPlacesData" object:nil];
+    
+    self.collectionView.backgroundColor = [UIColor scrollViewTexturedBackgroundColor];
+    
     [super viewDidLoad];
-    
-//    self.tableView.backgroundColor = [UIColor yellowColor];
-    
-    [[NSNotificationCenter defaultCenter] addObserver:self.tableView selector:@selector(reloadData) name:@"PlaceLoaded" object:nil];
-
-    // Uncomment the following line to preserve selection between presentations.
-    // self.clearsSelectionOnViewWillAppear = NO;
- 
-    // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
-//     self.navigationItem.rightBarButtonItem = self.editButtonItem;
 }
 
-- (void)viewDidUnload
+- (void) dataLoaded
 {
-    [super viewDidUnload];
-    // Release any retained subviews of the main view.
-    // e.g. self.myOutlet = nil;
+    [self.collectionView reloadData];
 }
 
-- (void) viewWillAppear:(BOOL)animated{
-    [self.tableView reloadData];
-    [super viewWillAppear:animated];
-}
-
-- (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
+- (void) newPlace
 {
-    return (interfaceOrientation == UIInterfaceOrientationPortrait);
+    [self.collectionView insertItemsAtIndexPaths:[NSArray arrayWithObject:
+                                                  [NSIndexPath indexPathForRow:[WhereShouldWeMeet manager].places.count
+                                                                     inSection:0]]];
+    [self.collectionView reloadData];
+    [self.collectionView scrollToItemAtIndexPath:[NSIndexPath indexPathForRow:[WhereShouldWeMeet manager].places.count inSection:0] atScrollPosition:UICollectionViewScrollPositionBottom animated:YES];
 }
 
-#pragma mark - Table view data source
+- (void)didReceiveMemoryWarning
+{
+    [super didReceiveMemoryWarning];
+    // Dispose of any resources that can be recreated.
+}
 
-- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
+- (NSInteger) numberOfSectionsInCollectionView:(UICollectionView *)collectionView
 {
     return 1;
 }
 
-- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
+- (NSInteger) collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section
 {
-    return [[WhereShouldWeMeet manager].places count];
+    return [WhereShouldWeMeet manager].places.count + 1;
 }
 
-- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
+- (UICollectionViewCell *) collectionView:(UICollectionView *)cv cellForItemAtIndexPath:(NSIndexPath *)indexPath
 {
-    WhereShouldWeMeet *manager = [WhereShouldWeMeet manager];
-    Place *place = [manager.places objectAtIndex:indexPath.row];
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"PlaceCell"];
-    cell.textLabel.text = [place description];
-//    UIActivityIndicatorView *activityIndicator = (UIActivityIndicatorView *) [cell viewWithTag:3];
-    if ([place isLoaded]){
-        cell.textLabel.textColor = [UIColor blackColor];
-//        [activityIndicator stopAnimating];
-    } else {
-        cell.textLabel.textColor = [UIColor grayColor];
-//        [activityIndicator startAnimating];
+    if (indexPath.item == [self collectionView:cv numberOfItemsInSection:indexPath.section] - 1)
+    {
+        UICollectionViewCell *cell = [cv dequeueReusableCellWithReuseIdentifier:@"AddPlaceCell" forIndexPath:indexPath];
+        cell.backgroundView = [[UIView alloc] initWithFrame:cell.frame];
+        cell.selectedBackgroundView = [[UIView alloc] initWithFrame:cell.frame];
+        cell.selectedBackgroundView.layer.borderColor = [UIColor blueColor].CGColor;
+        cell.selectedBackgroundView.layer.borderWidth = 4.0f;
+        return cell;
     }
-    return cell;
+    else
+    {
+        PlaceCell *cell = [cv dequeueReusableCellWithReuseIdentifier:@"PlaceCell" forIndexPath:indexPath];
+        Place *place = [[WhereShouldWeMeet manager].places objectAtIndex:indexPath.item];
+        cell.titleLabel.text = place.title;
+        cell.imageView.backgroundColor = [UIColor colorWithPatternImage: place.location? place.image : [place.image stackBlur:3]];
+        
+        if (!place.location){
+            [cell.activityIndicator startAnimating];
+        } else {
+            [cell.activityIndicator stopAnimating];
+        }
+        
+        CALayer *layer = cell.imageView.layer;
+        [layer setCornerRadius:20];
+        
+        return cell;
+    }
 }
 
-
-- (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath
+- (BOOL) collectionView:(UICollectionView *)cv shouldSelectItemAtIndexPath:(NSIndexPath *)indexPath
 {
-    return YES;
+    if (indexPath.item == [self collectionView:cv numberOfItemsInSection:indexPath.section] - 1)
+    {
+        return YES;
+    }
+    return NO;
 }
 
-
-
-// Override to support editing the table view.
-- (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath
+- (void) collectionView:(UICollectionView *)cv didSelectItemAtIndexPath:(NSIndexPath *)indexPath
 {
-    if (editingStyle == UITableViewCellEditingStyleDelete) {
-        [[WhereShouldWeMeet manager].places removeObjectAtIndex:indexPath.row];
-        [tableView deleteRowsAtIndexPaths:[NSArray arrayWithObject:indexPath] withRowAnimation:UITableViewRowAnimationFade];
-    }   
+    [self showAddPlaceActionSheet];
+    [cv deselectItemAtIndexPath:indexPath animated:YES];
 }
 
-- (IBAction)addPlace: (id) sender {
-    UIActionSheet *actionSheet = [[UIActionSheet alloc] initWithTitle:@"Choose one" delegate:self cancelButtonTitle:@"Cancel" destructiveButtonTitle:nil otherButtonTitles:@"Add Address", @"Add My Location", @"Add Friend's Location", nil];
+- (void)showAddPlaceActionSheet
+{
+    UIActionSheet *actionSheet = [[UIActionSheet alloc] initWithTitle:@"Choose one" delegate:self cancelButtonTitle:@"Cancel" destructiveButtonTitle:nil otherButtonTitles:@"Address", @"My Location", @"Friend's Location", nil];
     actionSheet.tag = 1;
-    [actionSheet showFromToolbar:self.navigationController.toolbar];
+    [actionSheet showInView: self.parentViewController.view];
 }
 
-- (void) actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex{
+- (void) addMyLocation
+{
+    MyLocationPlace *place = [[MyLocationPlace alloc] init];
+    [[WhereShouldWeMeet manager].places addObject:place];
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"NewPlace" object:nil];
+
+    void (^load)() = ^{
+        [[NSNotificationCenter defaultCenter] postNotificationName:@"ReloadPlacesData" object:nil];
+    };
+    [place loadLocation:load];
+    [place loadImage:load];
+}
+
+- (void) actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex
+{
     if (actionSheet.tag == 1){
         if (buttonIndex == 0){
-            [self performSegueWithIdentifier:@"AddAddressLocation" sender:self];
+            [self performSegueWithIdentifier:@"AddAddress" sender:self];
         } else if (buttonIndex == 1){
-            [[WhereShouldWeMeet manager].places addObject: [[MyLocationPlace alloc] init]];
-        }else if (buttonIndex == 2)
-            [self performSegueWithIdentifier:@"AddFriendLocation" sender:self];
+            [self addMyLocation];
+        }else if (buttonIndex == 2){
+            [self performSegueWithIdentifier:@"AddFriend" sender:self];
+        }
     }
-}
-
-#pragma mark - Table view delegate
-
-- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    [tableView deselectRowAtIndexPath:indexPath animated:YES];
 }
 
 @end

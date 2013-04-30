@@ -7,15 +7,10 @@
 //
 
 #import <UIKit/UIKit.h>
+#import <FBiOSSDK/FacebookSDK.h>
 
-@interface AddFriendLocationViewController : UIViewController {
-    UITableView *tableView;
-    
-    NSDictionary *selectedFriend;
+@interface AddFriendLocationViewController : FBFriendPickerViewController <FBFriendPickerDelegate> {
 }
-
-@property (nonatomic, retain) IBOutlet UITableView *tableView;
-@property (nonatomic, retain) NSDictionary *selectedFriend;
 
 - (IBAction)done:(id)sender;
 - (IBAction)cancel:(id)sender;

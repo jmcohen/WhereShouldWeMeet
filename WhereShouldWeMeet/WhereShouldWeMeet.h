@@ -18,16 +18,18 @@
     AppDelegate *appDelegate;
     
     NSMutableArray *places;
-    NSString *category;
+    NSMutableArray *locations; /* The locations of the places */
+    NSMutableArray *selectedCategories;
+    NSArray *venues;
     
     NSArray *categories;
     NSArray *userFriends;
-    NSArray *venues;
 }
 
 @property (nonatomic, strong) NSMutableArray *places;
+@property (nonatomic, strong) NSMutableArray *locations;
 @property (nonatomic, strong) NSArray *categories; 
-@property (nonatomic, strong) NSString *category;
+@property (nonatomic, strong) NSMutableArray *selectedCategories;
 @property (nonatomic, strong) NSArray *userFriends;
 @property (nonatomic, strong) NSArray *venues;
 @property (nonatomic, strong) AppDelegate *appDelegate;
@@ -35,7 +37,7 @@
 - (id) init;
 - (void) loadUserFriends;
 - (void) reportLocationToFriend: (NSString*) facebookId;
-- (void) user: (NSString *) facebookId didReportLocation: (Coordinate *) location;
+- (void) user: (NSString *) facebookId didReportLocation: (Location *) location;
 - (void) loadVenues;
 
 + (WhereShouldWeMeet *) manager;

@@ -43,47 +43,62 @@
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
 {
-    return (interfaceOrientation == UIInterfaceOrientationPortrait);
+    return (interfaceOrientation == UIInterfaceOrientationPortrait || UIInterfaceOrientationIsLandscape(interfaceOrientation));
 }
 
-- (BOOL)textFieldShouldReturn:(UITextField *)textField {
+- (BOOL)textFieldShouldReturn:(UITextField *)textField
+{
     [textField resignFirstResponder];
     return NO;
 }
 
-- (IBAction)done:(id)sender{
-    [[WhereShouldWeMeet manager].places addObject: [[AddressPlace alloc] initWithAddress: address]];
+- (IBAction)done:(id)sender
+{
+    AddressPlace *place = [[AddressPlace alloc] initWithAddress: address];
+    [[WhereShouldWeMeet manager].places addObject:place];
+    void (^load)() = ^{
+        [[NSNotificationCenter defaultCenter] postNotificationName:@"ReloadPlacesData" object:nil];
+    };
+    [place loadLocation:load];
+    [place loadImage:load];
     [self dismissModalViewControllerAnimated:YES];
 }
 
-- (IBAction)cancel:(id)sender{
+- (IBAction)cancel:(id)sender
+{
     [self dismissModalViewControllerAnimated:YES];
 }
 
-- (NSString *) tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section{
+- (NSString *) tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
+{
     return @"Address";
 }
 
-- (NSInteger) numberOfSectionsInTableView:(UITableView *)tableView{
+- (NSInteger) numberOfSectionsInTableView:(UITableView *)tableView
+{
     return 1;
 }
 
-- (NSInteger) tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
+- (NSInteger) tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
+{
     return 1;
 }
 
-- (UITableViewCell *) tableView:(UITableView *)tv cellForRowAtIndexPath:(NSIndexPath *)indexPath{
+- (UITableViewCell *) tableView:(UITableView *)tv cellForRowAtIndexPath:(NSIndexPath *)indexPath
+{
     UITableViewCell *cell = [tv dequeueReusableCellWithIdentifier:@"AddressFieldCell"];
     UITextField *addressField = (UITextField *) [cell viewWithTag:1];
     [addressField becomeFirstResponder];
     return cell;
 }
 
-- (void) textFieldDidBeginEditing:(UITextField *)textField{
+- (void) textFieldDidBeginEditing:(UITextField *)textField
+{
     self.doneButton.enabled = NO;
 }
 
-- (void) textFieldDidEndEditing:(UITextField *)textField{
+- (void) textFieldDidEndEditing:(UITextField *)textField
+{
     self.address = textField.text;
     self.doneButton.enabled = YES;
 }

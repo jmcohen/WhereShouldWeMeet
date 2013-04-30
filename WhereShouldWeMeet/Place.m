@@ -10,20 +10,30 @@
 
 @implementation Place
 
-@synthesize isLoaded, coordinate;
+@synthesize location, image;
 
 - (NSString *) description {
     return nil;
 }
 
-- (NSString *) placeType {
-    return nil;
+- (CLLocationCoordinate2D) coordinate {
+    return [self.location asCoordinate];
 }
 
-- (void) setIsLoaded:(BOOL)isNowLoaded {
-    isLoaded = isNowLoaded;
-    if (isLoaded)
-        [[NSNotificationCenter defaultCenter] postNotificationName:@"PlaceLoaded" object:self];
+- (NSString *) title{
+    return [self description];
+}
+
+- (NSString *) subtitle {
+    return [self.location description];
+}
+
+- (void) loadLocation:(void (^)())completionBlock {
+    
+}
+
+- (void) loadImage:(void (^)())completionBlock  {
+    
 }
 
 @end

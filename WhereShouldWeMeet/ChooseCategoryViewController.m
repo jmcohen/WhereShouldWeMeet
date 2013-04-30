@@ -8,6 +8,8 @@
 
 #import "ChooseCategoryViewController.h"
 #import "WhereShouldWeMeet.h"
+#import "CategoryCell.h"
+#import "LocalSearchEngine.h"
 
 @interface ChooseCategoryViewController ()
 
@@ -15,17 +17,14 @@
 
 @implementation ChooseCategoryViewController
 
-- (id)initWithStyle:(UITableViewStyle)style
-{
-    self = [super initWithStyle:style];
-    if (self) {
-        // Custom initialization
-    }
-    return self;
-}
+@synthesize collectionView;
 
 - (void)viewDidLoad
 {
+    
+    self.collectionView.backgroundColor = [UIColor scrollViewTexturedBackgroundColor];
+    self.collectionView.allowsMultipleSelection = YES;
+
     [super viewDidLoad];
 
     // Uncomment the following line to preserve selection between presentations.
@@ -44,86 +43,42 @@
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
 {
-    return (interfaceOrientation == UIInterfaceOrientationPortrait);
+    return (interfaceOrientation == UIInterfaceOrientationPortrait || UIInterfaceOrientationIsLandscape(interfaceOrientation));
 }
 
-#pragma mark - Table view data source
-
-- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
-{
-    return 1;
-}
-
-- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
-{
+- (NSInteger) collectionView:(UICollectionView *)cv numberOfItemsInSection:(NSInteger)section{
     return [WhereShouldWeMeet manager].categories.count;
 }
 
-- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
+- (UICollectionViewCell *) collectionView:(UICollectionView *)cv cellForItemAtIndexPath:(NSIndexPath *)indexPath
 {
-    WhereShouldWeMeet *manager = [WhereShouldWeMeet manager];
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"CategoryCell"];
-    NSString *currentCategory = [manager.categories objectAtIndex:indexPath.row];
-    cell.textLabel.text = currentCategory;
-    if ([manager.category isEqualToString:currentCategory])
-        cell.accessoryType = UITableViewCellAccessoryCheckmark;
-    else 
-        cell.accessoryType = UITableViewCellAccessoryNone;
+    CategoryCell *cell = [cv dequeueReusableCellWithReuseIdentifier:@"CategoryCell" forIndexPath:indexPath];
+    NSString *categoryId = [[LocalSearchEngine categoryIds] objectAtIndex:indexPath.item];
+    NSString *categoryName = [[WhereShouldWeMeet manager].categories objectAtIndex:indexPath.item];
+    cell.imageView.image = [UIImage imageNamed: [NSString stringWithFormat:@"person.png"]];
+    cell.titleLabel.text = categoryName;
+    
+    cell.backgroundView = [[UIView alloc] initWithFrame:cell.frame];
+
+    if ([[WhereShouldWeMeet manager].selectedCategories containsObject: categoryName]){
+        cell.backgroundView.layer.borderColor = [UIColor blueColor].CGColor;
+        cell.backgroundView.layer.borderWidth = 4.0f;
+    }
+    
     return cell;
 }
 
-/*
-// Override to support conditional editing of the table view.
-- (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    // Return NO if you do not want the specified item to be editable.
-    return YES;
-}
-*/
-
-/*
-// Override to support editing the table view.
-- (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    if (editingStyle == UITableViewCellEditingStyleDelete) {
-        // Delete the row from the data source
-        [tableView deleteRowsAtIndexPaths:[NSArray arrayWithObject:indexPath] withRowAnimation:UITableViewRowAnimationFade];
-    }   
-    else if (editingStyle == UITableViewCellEditingStyleInsert) {
-        // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
-    }   
-}
-*/
-
-/*
-// Override to support rearranging the table view.
-- (void)tableView:(UITableView *)tableView moveRowAtIndexPath:(NSIndexPath *)fromIndexPath toIndexPath:(NSIndexPath *)toIndexPath
-{
-}
-*/
-
-/*
-// Override to support conditional rearranging of the table view.
-- (BOOL)tableView:(UITableView *)tableView canMoveRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    // Return NO if you do not want the item to be re-orderable.
-    return YES;
-}
-*/
-
-#pragma mark - Table view delegate
-
-- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
-{
+- (void) collectionView:(UICollectionView *)cv didSelectItemAtIndexPath:(NSIndexPath *)indexPath{
     WhereShouldWeMeet *manager = [WhereShouldWeMeet manager];
-    NSString *selected = [manager.categories objectAtIndex:indexPath.row];
-    if (manager.category == selected)
-        [tableView deselectRowAtIndexPath:indexPath animated:YES];
-    else {
-        NSIndexPath *old = [NSIndexPath indexPathForRow:[manager.categories indexOfObject:manager.category] inSection:0];
-        manager.category = selected;
-        [tableView reloadRowsAtIndexPaths:[NSArray arrayWithObjects:indexPath, old, nil] withRowAnimation:UITableViewRowAnimationFade];
+    NSString *selected = [manager.categories objectAtIndex:indexPath.item];
+    if ([manager.selectedCategories containsObject:selected]){
+        [manager.selectedCategories removeObject:selected];
     }
+    else {
+        [manager.selectedCategories addObject:selected];
+    }
+    [cv reloadData];
+//    [cv reloadItemsAtIndexPaths:[NSArray arrayWithObject:indexPath]];
 }
 
 @end

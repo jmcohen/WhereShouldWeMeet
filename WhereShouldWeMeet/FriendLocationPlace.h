@@ -8,15 +8,18 @@
 
 #import <UIKit/UIKit.h>
 #import "Place.h"
+#import <FBiOSSDK/FacebookSDK.h>
+
+@class MKNetworkOperation;
 
 @interface FriendLocationPlace : Place {
-    NSString *friendName;
-    NSString *friendId;
+    id<FBGraphUser> friend;
+    MKNetworkOperation *imageLoadOperation;
+    void (^locationLoadCompletionBlock)();
 }
 
-@property (nonatomic, strong) NSString *friendName;
-@property (nonatomic, strong) NSString *friendId;
+- (id) initWithFriend: (id<FBGraphUser>) theFriend;
 
-- (id) initWithFriend: (NSDictionary *) friend;
+@property (nonatomic, strong) id<FBGraphUser> friend;
 
 @end

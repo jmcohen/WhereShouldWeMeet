@@ -7,21 +7,21 @@
 //
 
 #import "MKNetworkEngine.h"
+#import <CoreLocation/CLLocation.h>
 
-@class Facebook;
-@class Coordinate;
+@class Location;
+@class Venue;
 
 @interface FriendsLocationEngine : MKNetworkEngine {
-    Facebook *facebook;
 }
 
 typedef void (^UserFriendsBlock)(NSArray *userFriends);
 
-@property (strong, nonatomic) Facebook *facebook;
 
 - (MKNetworkOperation *) registerUser: (NSString *)deviceToken;
 - (MKNetworkOperation *) getUserFriendsOnCompletion: (UserFriendsBlock) userFriendsBlock;
 - (MKNetworkOperation *) requestFriendLocation: (NSString *) friendId;
-- (MKNetworkOperation *) reportCoordinate: (Coordinate *) coordinate toFriend: (NSString *) friendId;
+- (MKNetworkOperation *) broadcastVenue: (Venue *) location toFriends: (NSArray *) friendIds;
+- (MKNetworkOperation *) reportLocation: (Location *) location toFriend: (NSString *) friendId;
 
 @end

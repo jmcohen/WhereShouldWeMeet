@@ -16,14 +16,16 @@
 
 @implementation AddFriendLocationViewController
 
-@synthesize selectedFriend, tableView;
-
 - (void)viewDidLoad
 {
     WhereShouldWeMeet *manager = [WhereShouldWeMeet manager];
     if (manager.userFriends == nil)
         [manager loadUserFriends];
-    [[NSNotificationCenter defaultCenter] addObserver:self.tableView selector:@selector(reloadData) name:@"UserFriendsLoaded" object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updateView) name:@"UserFriendsLoaded" object:nil];
+    
+    self.delegate = self;    
+    [self loadData];
+    
     [super viewDidLoad];
 }
 
@@ -34,51 +36,26 @@
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
 {
-    return (interfaceOrientation == UIInterfaceOrientationPortrait);
+    return (interfaceOrientation == UIInterfaceOrientationPortrait || UIInterfaceOrientationIsLandscape(interfaceOrientation));
 }
 
-#pragma mark - Table view data source
-
-- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
-{
-    return 1;
-}
-
-- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
-{
-    return [[WhereShouldWeMeet manager].userFriends count];
-}
-
-- (UITableViewCell *)tableView:(UITableView *)tv cellForRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    UITableViewCell *cell = [tv dequeueReusableCellWithIdentifier:@"FriendCell"];
-    NSDictionary *friend = [[WhereShouldWeMeet manager].userFriends objectAtIndex:indexPath.row];
-    cell.textLabel.text = [friend objectForKey:@"name"];
-    if (friend == selectedFriend)
-        cell.accessoryType = UITableViewCellAccessoryCheckmark;
-    else 
-        cell.accessoryType = UITableViewCellAccessoryNone;
-    return cell;
-}
-
-#pragma mark - Table view delegate
-
-- (void)tableView:(UITableView *)tv didSelectRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    NSDictionary *friend = [[WhereShouldWeMeet manager].userFriends objectAtIndex:indexPath.row];
-    if (selectedFriend == friend)
-        [tv deselectRowAtIndexPath:indexPath animated:YES];
-    else {
-        NSIndexPath *old = [NSIndexPath indexPathForRow:[[WhereShouldWeMeet manager].userFriends indexOfObject:selectedFriend] inSection:0];
-        selectedFriend = friend;
-        [tv reloadRowsAtIndexPaths:[NSArray arrayWithObjects:old, indexPath, nil] withRowAnimation:UITableViewRowAnimationFade];
-    }
+- (BOOL) friendPickerViewController:(FBFriendPickerViewController *)friendPicker shouldIncludeUser:(id<FBGraphUser>)user{
+    return [[WhereShouldWeMeet manager].userFriends containsObject:user.id];
 }
 
 - (IBAction)done:(id)sender{
-    if (self.selectedFriend){
-        [[WhereShouldWeMeet manager].places addObject: [[FriendLocationPlace alloc] initWithFriend:self.selectedFriend]];
-    }
+    for (id<FBGraphUser> friend in self.selection)
+    {
+        FriendLocationPlace *place = [[FriendLocationPlace alloc] initWithFriend:friend];
+        [[WhereShouldWeMeet manager].places addObject: place];
+        [[NSNotificationCenter defaultCenter] postNotificationName:@"NewPlace" object:nil];
+
+        void (^load)() = ^{
+            [[NSNotificationCenter defaultCenter] postNotificationName:@"ReloadPlacesData" object:nil];
+        };
+        [place loadLocation:load];
+        [place loadImage:load];
+    }        
     [self dismissModalViewControllerAnimated:YES];
 }
 

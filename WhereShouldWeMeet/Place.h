@@ -7,19 +7,23 @@
 //
 
 #import <Foundation/Foundation.h>
-#import <CoreLocation/CLLocation.h>
+#import "Location.h"
+#import <MapKit/MKAnnotation.h>
 
-@class Coordinate;
-
-@interface Place : NSObject {
-    BOOL isLoaded;
-    Coordinate *coordinate;
+@interface Place : NSObject <MKAnnotation> {
+    Location *location;
+    UIImage *image;
 }
 
-@property (nonatomic) BOOL isLoaded;
-@property (nonatomic, strong) Coordinate *coordinate;
+@property (nonatomic, strong) Location *location;
+@property (nonatomic, strong) UIImage *image;
+
+@property (nonatomic, readonly) CLLocationCoordinate2D coordinate;
+@property (nonatomic, readonly, copy) NSString *title;
+@property (nonatomic, readonly, copy) NSString *subtitle;
 
 - (NSString *) description;
-- (NSString *) placeType;
+- (void) loadLocation: (void (^)())completionBlock;
+- (void) loadImage:(void (^)())completionBlock;
 
 @end

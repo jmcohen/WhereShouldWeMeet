@@ -8,6 +8,10 @@
 
 #import <UIKit/UIKit.h>
 
-@interface ChooseCategoryViewController : UITableViewController
+@interface ChooseCategoryViewController : UIViewController <UICollectionViewDataSource, UICollectionViewDelegate> {
+    UICollectionView *collectionView;
+}
+
+@property (nonatomic, strong) IBOutlet UICollectionView *collectionView;
 
 @end

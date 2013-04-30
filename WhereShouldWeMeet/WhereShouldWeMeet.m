@@ -7,25 +7,25 @@
 //
 
 #import "WhereShouldWeMeet.h"
-#import "Facebook.h"
 #import "AppDelegate.h"
 #import "CLLocationManager+blocks.h"
 #import "FriendLocationPlace.h"
-#import "Coordinate.h"
+#import "Location.h"
 #import "FriendsLocationEngine.h"
-#import "CityGridEngine.h"
+#import "LocalSearchEngine.h"
+#import "UIAlertView+Blocks.h"
 
 @implementation WhereShouldWeMeet
 
 static WhereShouldWeMeet *_manager = NULL;
 
-@synthesize places, categories, category, userFriends, venues, appDelegate;
+@synthesize places, locations, categories, selectedCategories, userFriends, venues, appDelegate;
 
 - (id) init {
     if (self = [super init]){
         places = [NSMutableArray array];
-        categories = [NSMutableArray arrayWithObjects: @"Cafe", @"Restaurant", @"Pizzeria", @"Bar", @"Bookstore", @"Clothing store", @"Movie theater", @"Salon", @"Cemetary", nil];
-        category = [categories objectAtIndex:0];
+        categories = [LocalSearchEngine categories];
+        selectedCategories = [NSMutableArray array];
         appDelegate = (AppDelegate *) [UIApplication sharedApplication].delegate;
     }
     return self;
@@ -40,7 +40,7 @@ static WhereShouldWeMeet *_manager = NULL;
 
 - (void) reportLocationToFriend:(NSString *)facebookId{
     locationManager = [[CLLocationManager alloc] initWithUpdateBlock:^(CLLocationManager *manager, CLLocation *newLocation, CLLocation *oldLocation, BOOL *stop) {
-        [self.appDelegate.friendsLocationEngine reportCoordinate:[[Coordinate alloc] initWithLocation:newLocation] toFriend:facebookId];
+        [self.appDelegate.friendsLocationEngine reportLocation:([[Location alloc] initWithCoordinate:newLocation.coordinate]) toFriend:facebookId];
         [manager stopUpdatingLocation];
     } errorBlock:^(NSError *error) {
         NSLog(@"Error updating location: %@", error);
@@ -49,44 +49,47 @@ static WhereShouldWeMeet *_manager = NULL;
     [locationManager startUpdatingLocation];
 }
 
-- (void) user:(NSString *)facebookId didReportLocation:(Coordinate *)location{
+- (void) user:(NSString *)facebookId didReportLocation:(Location *)location{
     for (id place in self.places)
-        if ([[place placeType] isEqualToString:@"Friend"]){
-            if ([[place friendId] isEqualToString:facebookId]) {
-                [place setCoordinate: location];
-                [place setIsLoaded:YES];
+        if ([place isKindOfClass:[FriendLocationPlace class]]){
+            if ([[place friend].id isEqualToString:facebookId]) {
+                [place setLocation: location];
             }
         }
 }
 
 float searchRadius(float meanDistance){
-    float LOWER_LIMIT = .5;
-    float UPPER_LIMIT = 20;
-    float radius = meanDistance;
+    float LOWER_LIMIT = 5000;
+    float UPPER_LIMIT = 50000;
+    float radius = meanDistance * .2;
     if (radius > UPPER_LIMIT)
         radius = UPPER_LIMIT;
-    else 
+    else if (radius < LOWER_LIMIT)
         radius = LOWER_LIMIT;
     return radius;
 }
 
     
 - (void) loadVenues {
-    NSMutableArray *coordinates = [[NSMutableArray alloc] init];
+    self.locations = [NSMutableArray array];
     for (Place *place in self.places)
-        if ([place isLoaded]){
-            [coordinates addObject:place.coordinate];
+        if (place.location){
+            [locations addObject:place.location];
         }
     
-    
-    NSDictionary *meanInfo = [Coordinate meanInfo: coordinates];
-    Coordinate *meanPosition = [meanInfo objectForKey:@"position"];
+    NSDictionary *meanInfo = [Location meanInfo: locations];
+    Location *meanPosition = [meanInfo objectForKey:@"position"];
     NSNumber *meanDistance = [meanInfo objectForKey:@"distance"];
     NSNumber *radius = [NSNumber numberWithFloat:searchRadius(meanDistance.floatValue)];
-    [self.appDelegate.cityGridEngine getVenuesForCoordinate:meanPosition radius: radius category:self.category onSuccess:^(NSArray *theVenues) {
+    [self.appDelegate.localSearchEngine getVenuesForLocation:meanPosition radius: radius selectedCategories:self.selectedCategories
+    onSuccess:^(NSArray *theVenues) {
         self.venues = theVenues;
         [[NSNotificationCenter defaultCenter] postNotificationName:@"VenuesLoaded" object:self]; 
-    }];
+    }
+     onEmpty:^{
+         UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"No Venues" message:@"We couldn't find any venues of the selected types near the geographic center." delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
+         [alertView show];
+     }];
 }
 
 + (WhereShouldWeMeet *) manager{

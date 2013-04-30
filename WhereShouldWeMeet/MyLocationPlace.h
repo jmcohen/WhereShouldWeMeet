@@ -9,7 +9,7 @@
 #import "Place.h"
 #import <CoreLocation/CLLocationManagerDelegate.h>
 
-@interface MyLocationPlace : Place <CLLocationManagerDelegate> {
+@interface MyLocationPlace : Place {
     CLLocationManager *locationManager;
 }
 
